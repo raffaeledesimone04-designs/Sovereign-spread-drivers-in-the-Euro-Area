@@ -1,11 +1,3 @@
-# ============================================================
-# 06 — GRAFICI della tesi
-# Tesi: Gli spread sovrani nell'UEM (2000-2025) — Raffaele De Simone
-# Legge i dati dei grafici della tesi da data/ e salva in figure/ (SVG e PNG):
-#   data/Grafici spread sovrani.xlsx           (spread mensili vs Bund)
-#   data/Italia_Controfattuale3.xlsx           (controfattuale APP e PEPP, foglio "Scomposizione paesi")
-# ============================================================
-
 library(readxl)
 library(dplyr)
 library(tidyr)
@@ -16,20 +8,16 @@ dir.create("figure", showWarnings = FALSE)
 file_spread <- "data/Grafici spread sovrani.xlsx"
 file_cf     <- "data/Italia_Controfattuale3.xlsx"
 
-# -----------------------------------------------
-# Stile comune
-# -----------------------------------------------
 colori <- c(
   "Italia" = "#2a78d6", "Spagna" = "#eb6834", "Portogallo" = "#1baf7a",
   "Grecia" = "#eda100", "Francia" = "#6250d6", "Belgio" = "#e87ba4",
   "Austria" = "#008300", "Paesi Bassi" = "#e34948", "Finlandia" = "#52514e"
 )
-# Strumenti di politica monetaria della BCE (date di avvio/annuncio come nella tesi)
 eventi <- data.frame(
   data  = as.Date(c("2009-07-01", "2010-05-01", "2011-12-01", "2012-09-01",
                     "2015-03-01", "2020-03-01", "2022-07-01")),
   label = c("CBPP1", "SMP", "CBPP2 / LTRO", "OMT", "APP", "PEPP", "TPI"),
-  riga  = c(1, 2, 3, 4, 1, 1, 1)   # etichette sfalsate dove le date sono vicine
+  riga  = c(1, 2, 3, 4, 1, 1, 1)
 )
 crisi  <- data.frame(inizio = as.Date(c("2010-05-01", "2020-03-01")),
                      fine   = as.Date(c("2012-09-01", "2021-06-01")))
@@ -94,13 +82,9 @@ grafico_spread <- function(dati, titolo, sottotitolo) {
     tema
 }
 
-# -----------------------------------------------
-# Figura 1 — Spread dei Paesi periferici
-# -----------------------------------------------
 perif <- leggi_spread("2000-2025 periferici") %>%
   mutate(country = factor(country, levels = c("Italia", "Spagna", "Portogallo", "Grecia")))
 
-# Come nella tesi: Italia e Spagna sull'asse sinistro, Portogallo e Grecia sull'asse destro
 fattore <- ceiling(max(perif$spread[perif$country %in% c("Portogallo", "Grecia")]) /
                    max(perif$spread[perif$country %in% c("Italia", "Spagna")]))
 perif <- perif %>%
@@ -115,7 +99,7 @@ fig1 <- ggplot(perif, aes(time, y_plot, colour = country)) +
   geom_line(linewidth = 0.7) +
   scale_colour_manual(values = colori_perif) +
   scale_y_continuous(name = "Italia e Spagna (punti base)",
-                     expand = expansion(mult = c(0.02, 0.22)),  # spazio in alto per le etichette BCE
+                     expand = expansion(mult = c(0.02, 0.22)),
                      sec.axis = sec_axis(~ . * fattore, name = "Portogallo e Grecia (punti base)")) +
   scale_x_date(breaks = seq(as.Date("2000-01-01"), as.Date("2024-01-01"), by = "4 years"),
                date_labels = "%Y", expand = c(0.01, 0)) +
@@ -125,23 +109,15 @@ fig1 <- ggplot(perif, aes(time, y_plot, colour = country)) +
   theme(axis.title.y.right = element_text(colour = "grey35", size = 10)) +
   guides(colour = guide_legend(nrow = 2))
 
-# -----------------------------------------------
-# Figura 2 — Spread dei Paesi core
-# -----------------------------------------------
 core <- leggi_spread("2000-2025 core") %>%
   mutate(country = factor(country, levels = c("Francia", "Belgio", "Austria", "Paesi Bassi", "Finlandia")))
 
 fig2 <- grafico_spread(core, "Spread sovrani dei Paesi core",
                        "Differenziale del decennale rispetto al Bund tedesco, 2000-2025")
 
-# -----------------------------------------------
-# Figura 3 — Controfattuale per Paese (2015-2025)
-# -----------------------------------------------
 paesi_cf <- c("Italia", "Spagna", "Portogallo", "Grecia")
 sigle    <- c("Italia" = "IT", "Spagna" = "ES", "Portogallo" = "PT", "Grecia" = "GR")
 
-# Foglio "Scomposizione paesi": per ogni Paese spread osservato, componente APP,
-# componente PEPP e spread controfattuale (bAPP = -0,0176; bPEPP = -5,41), gen 2015 - dic 2025
 scomp <- suppressMessages(read_excel(file_cf, sheet = "Scomposizione paesi"))
 scomp$time <- seq(as.Date("2015-01-01"), by = "month", length.out = nrow(scomp))
 
@@ -175,9 +151,6 @@ fig3 <- ggplot(cf, aes(time)) +
        x = NULL, y = "Punti base") +
   tema
 
-# -----------------------------------------------
-# Figura 4 — Compressione a giugno 2020 (picco degli acquisti PEPP)
-# -----------------------------------------------
 giugno20 <- cf %>%
   filter(time == as.Date("2020-06-01")) %>%
   select(country, comp_app, comp_pepp) %>%
@@ -203,9 +176,6 @@ fig4 <- ggplot(giugno20, aes(pb, country, fill = programma)) +
         panel.grid.major.x = element_line(colour = "grey90"),
         axis.text.y = element_text(size = 12, colour = "grey15"))
 
-# -----------------------------------------------
-# Salvataggio
-# -----------------------------------------------
 salva <- function(grafico, nome, altezza) {
   ggsave(file.path("figure", paste0(nome, ".svg")), grafico, width = 9, height = altezza)
   ggsave(file.path("figure", paste0(nome, ".png")), grafico, width = 9, height = altezza, dpi = 200, bg = "white")

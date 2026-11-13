@@ -1,23 +1,11 @@
-# ============================================================
-# 05 — CONTROFATTUALE: spread senza APP e PEPP
-# Tesi: Gli spread sovrani nell'UEM (2000-2025) — Raffaele De Simone
-# Richiede 01-02. Spread controfattuale = osservato - (bAPP x APP + bPEPP x PEPP).
-# ============================================================
-
 library(dplyr)
 
-# -----------------------------------------------
-# Coefficienti del modello completo
-# -----------------------------------------------
 coef_app  <- coef(mod_full)["APP_aggregato"]
 coef_pepp <- coef(mod_full)["PEPP"]
 
 cat("Coefficiente APP_aggregato:", round(coef_app, 5), "\n")
 cat("Coefficiente PEPP         :", round(coef_pepp, 5), "\n")
 
-# -----------------------------------------------
-# Effetto dei due programmi, mese per mese e Paese per Paese
-# -----------------------------------------------
 df_cf <- panel_stima %>%
   mutate(
     effetto_app    = coef_app  * APP_aggregato,
@@ -26,13 +14,9 @@ df_cf <- panel_stima %>%
     spread_no_pepp = spread - effetto_pepp
   )
 
-# Solo i Paesi periferici
 paesi_periferici <- c("Italia", "Spagna", "Portogallo", "Grecia")
 df_perif <- df_cf %>% filter(country %in% paesi_periferici)
 
-# -----------------------------------------------
-# Riepilogo per Paese (medie sull'intero periodo e ultimo mese)
-# -----------------------------------------------
 tab_riepilogo <- df_perif %>%
   group_by(country) %>%
   summarise(
@@ -46,10 +30,6 @@ tab_riepilogo <- df_perif %>%
 cat("\n===== TABELLA RIEPILOGO PER PAESE =====\n")
 print(tab_riepilogo)
 
-# -----------------------------------------------
-# Serie completa mese per mese
-# (resta in memoria come tab_serie_completa: si può aprire con View(tab_serie_completa))
-# -----------------------------------------------
 tab_serie_completa <- df_perif %>%
   select(country, time, spread, effetto_app, spread_no_app,
          effetto_pepp, spread_no_pepp) %>%
@@ -59,9 +39,6 @@ cat("\n===== SERIE COMPLETA (prime 12 righe) =====\n")
 print(head(tab_serie_completa, 12))
 cat("\nOggetto disponibile in memoria: tab_serie_completa (", nrow(tab_serie_completa), "righe)\n")
 
-# -----------------------------------------------
-# Tavola 3: giugno 2020 (picco PEPP), dicembre 2021, giugno 2022 (picco APP)
-# -----------------------------------------------
 tavola3 <- df_perif %>%
   filter(time %in% as.Date(c("2020-06-01", "2021-12-01", "2022-06-01"))) %>%
   transmute(country, time,
