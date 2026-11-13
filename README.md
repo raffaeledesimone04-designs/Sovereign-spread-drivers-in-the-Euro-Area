@@ -1,12 +1,10 @@
 # Sovereign spread drivers in the Euro Area (2000–2025)
 
-**A fixed-effects panel analysis of macroeconomic fundamentals, fiscal policy and ECB monetary policy, with an APP/PEPP counterfactual**
-
 Raffaele De Simone · Sapienza University of Rome · developed during an internship at the Italian Ministry of Economy and Finance (MEF)
 
 ---
 
-This repository presents the R code and the main charts of my analysis of euro area sovereign spreads.
+This repository presents the R code and the main charts of my analysis of the drivers of euro area sovereign spreads: which factors explain the spread of each country over Germany, how their weight has changed across market phases, and how much ECB policy has helped to compress spreads.
 
 I estimate a country fixed-effects panel on 9 euro area countries (Italy, Spain, Portugal, Greece, France, Belgium, Austria, Netherlands, Finland) from January 2000 to April 2025. The dependent variable is the 10-year government bond spread over the German Bund. The explanatory variables are:
 
