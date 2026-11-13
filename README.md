@@ -20,6 +20,19 @@ This repository presents the main charts of my analysis of euro area sovereign s
 2. **Public finances are priced, conventional policy is not enough** — budget balances and excessive deficit procedures move spreads, while rate cuts alone could not contain them during the debt crisis.
 3. **APP and PEPP are complements** — the APP as a uniform, structural backstop; the PEPP, free from the capital key, as a targeted and timely anti-fragmentation tool.
 
+## Code
+
+```
+├── run_all.R                     runs the whole analysis in order
+└── R/
+    ├── 01_dati_e_panel.R         data loading and panel construction
+    ├── 02_modello_completo.R     fixed-effects model, 2000–2025
+    ├── 03_finestre_temporali.R   2000–07, 2008–19, 2020–25 windows
+    ├── 04_robustezza_no2020.R    re-estimation excluding 2020
+    ├── 05_controfattuale.R       spreads without APP and PEPP
+    └── 06_grafici.R              charts (ggplot2), saved to figure/
+```
+
 ## Contact
 
-Raffaele De Simone · code available on request
+Raffaele De Simone
