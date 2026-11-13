@@ -12,11 +12,11 @@ I estimate a country fixed-effects panel on 9 euro area countries (Italy, Spain,
 
 - **market and macro**: relative industrial production vs. Germany, real effective exchange rate, VIX, bid-ask spread;
 - **fiscal policy**: debt-to-GDP and budget balance differentials vs. Germany, excessive deficit procedure;
-- **ECB monetary policy**: deposit facility rate, first-generation purchases (CBPP1, CBPP2, LTRO), APP stock, PEPP purchases by country.
+- **ECB monetary policy**: deposit facility rate; first-generation measures, i.e. the Covered Bond Purchase Programmes (CBPP1, CBPP2) and the 3-year Longer-Term Refinancing Operations (LTRO); the stock of the Asset Purchase Programme (APP); monthly purchases by country under the Pandemic Emergency Purchase Programme (PEPP).
 
-The model is estimated on the full sample, on three market phases (2000–07, 2008–19, 2020–25) and excluding 2020 as a robustness check.
+The model is estimated on the full sample and on three market phases (2000–07, 2008–19, 2020–25). As a robustness check for the COVID shock, it is re-estimated excluding 2020.
 
-I then build a counterfactual of the spreads of the peripheral countries (Italy, Spain, Portugal, Greece) without the APP and the PEPP, to measure how much the two programmes compressed them.
+Finally, for the peripheral countries (Italy, Spain, Portugal, Greece) I estimate what spreads would have been without the APP and the PEPP. The gap between observed and counterfactual spreads measures how much each programme compressed them.
 
 ## Charts
 
@@ -25,6 +25,8 @@ I then build a counterfactual of the spreads of the peripheral countries (Italy,
 ![Core spreads](figure/fig2_spread_core.svg)
 
 ![Counterfactual](figure/fig3_controfattuale_periferici.svg)
+
+*ECB instruments in the charts: CBPP1/CBPP2 – Covered Bond Purchase Programmes; SMP – Securities Markets Programme; LTRO – Longer-Term Refinancing Operations; OMT – Outright Monetary Transactions; APP – Asset Purchase Programme; PEPP – Pandemic Emergency Purchase Programme; TPI – Transmission Protection Instrument.*
 
 ## Results
 
@@ -53,10 +55,6 @@ Dependent variable: 10-year sovereign spread vs. Germany, basis points. Robust s
 
 ### Table 2 — Counterfactual: spread compression due to APP and PEPP (basis points)
 
-$$\text{Counterfactual spread}_{it} = \text{Observed spread}_{it} - (\beta_{APP} \times APP_t + \beta_{PEPP} \times PEPP_{it})$$
-
-with $\beta_{APP} = -0.0176$ (full sample) and $\beta_{PEPP} = -5.41$ (2020–25 window).
-
 | Country | Date | Observed | APP effect | PEPP effect | Total effect | Counterfactual |
 |---|---|---|---|---|---|---|
 | Italy | Jun 2020 | 169.9 | 51.0 | 116.0 | 167.0 | 336.9 |
@@ -84,12 +82,6 @@ with $\beta_{APP} = -0.0176$ (full sample) and $\beta_{PEPP} = -5.41$ (2020–25
     ├── 05_controfattuale.R       spreads without APP and PEPP
     └── 06_grafici.R              charts (ggplot2), saved to figure/
 ```
-
-## Key findings
-
-1. **The weight markets give to fundamentals changes over time.** Before 2008 sovereign risk was underpriced and spreads ignored fundamentals; after the 2008 crisis markets started pricing them heavily; after 2020 spreads were driven mainly by ECB policy.
-2. **Public finances matter, rate cuts alone do not.** A worse budget balance and an excessive deficit procedure widen spreads; during the debt crisis cutting the deposit rate was not enough to contain them.
-3. **APP and PEPP work as complements.** The APP compressed all spreads by a similar amount; the PEPP, free from the capital key, targeted the countries under most stress, Italy and Spain above all, in 2020.
 
 ## Contact
 
